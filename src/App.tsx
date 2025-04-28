@@ -38,7 +38,7 @@ function App() {
                                 playsInline
                                 preload="auto"
                                 style={{ width: "100%", maxWidth: "500px" }}
-                                controls={false}
+                                controls={true}
                                 autoPlay={false}
                                 onLoadedMetadata={handleLoadedMetadata}></video>
                             <Slider
