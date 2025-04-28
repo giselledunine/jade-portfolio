@@ -34,6 +34,11 @@ function App() {
                             <video
                                 ref={videoRef}
                                 src={"/jadeStarAnimation.mp4"}
+                                muted
+                                playsInline
+                                style={{ width: "100%", maxWidth: "500px" }}
+                                controls={false} // or true if you want
+                                autoPlay={false}
                                 onLoadedMetadata={handleLoadedMetadata}></video>
                             <Slider
                                 defaultValue={[0]}
