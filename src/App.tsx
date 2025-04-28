@@ -30,7 +30,7 @@ function App() {
                 {/* <color attach="background" args={["000000"]} /> */}
                 <ScrollControls damping={0.3} pages={5}>
                     <Scroll html style={{ width: "100%" }}>
-                        <div className="flex justify-center items-center w-[100vw] h-[100vh] bg-black">
+                        <div className="flex flex-col md:flex-row justify-center items-center w-[100vw] h-[100vh] bg-black">
                             <video
                                 ref={videoRef}
                                 src={"/jadeStarAnimation.mp4"}
