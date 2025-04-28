@@ -11,7 +11,11 @@ function App() {
 
     const handleLoadedMetadata = () => {
         console.log("video", videoRef?.current?.duration);
-        if (videoRef?.current) setDuration(videoRef?.current?.duration);
+        if (videoRef?.current) {
+            videoRef.current.play();
+            videoRef.current.pause();
+            setDuration(videoRef?.current?.duration);
+        }
         setValue(0);
     };
 
@@ -20,10 +24,6 @@ function App() {
         console.log("newTime", newTime);
         setValue(newTime);
         if (videoRef.current) {
-            if (value == 0) {
-                videoRef.current.play();
-                videoRef.current.pause();
-            }
             videoRef.current.currentTime = newTime;
         }
     };
