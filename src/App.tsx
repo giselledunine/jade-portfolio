@@ -33,11 +33,12 @@ function App() {
                         <div className="flex flex-col md:flex-row justify-center items-center w-[100vw] h-[100vh] bg-black">
                             <video
                                 ref={videoRef}
-                                src={"/jadeStarAnimation.mp4"}
+                                src={`${window.location.origin}/jadeStarAnimation.mp4`}
                                 muted
                                 playsInline
+                                preload="auto"
                                 style={{ width: "100%", maxWidth: "500px" }}
-                                controls={false} // or true if you want
+                                controls={false}
                                 autoPlay={false}
                                 onLoadedMetadata={handleLoadedMetadata}></video>
                             <Slider
