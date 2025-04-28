@@ -15,11 +15,15 @@ function App() {
         setValue(0);
     };
 
-    const handleSlideChange = (value: number[]) => {
-        const newTime = value[0];
+    const handleSlideChange = (time: number[]) => {
+        const newTime = time[0];
         console.log("newTime", newTime);
         setValue(newTime);
         if (videoRef.current) {
+            if (value == 0) {
+                videoRef.current.play();
+                videoRef.current.pause();
+            }
             videoRef.current.currentTime = newTime;
         }
     };
@@ -38,7 +42,7 @@ function App() {
                                 playsInline
                                 preload="auto"
                                 style={{ width: "100%", maxWidth: "500px" }}
-                                controls={true}
+                                controls={false}
                                 autoPlay={false}
                                 onLoadedMetadata={handleLoadedMetadata}></video>
                             <Slider
