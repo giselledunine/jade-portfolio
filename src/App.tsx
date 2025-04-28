@@ -25,10 +25,10 @@ function App() {
     };
 
     return (
-        <div className="w-[100vw] h-[100vh]">
+        <div className="w-[100vw] h-[100vh] touch-pan-y">
             <Canvas>
                 {/* <color attach="background" args={["000000"]} /> */}
-                <ScrollControls damping={0.3} pages={5}>
+                <ScrollControls damping={0.3} pages={5} enabled={true}>
                     <Scroll html style={{ width: "100%" }}>
                         <div className="flex flex-col md:flex-row justify-center items-center w-[100vw] h-[100vh] bg-black">
                             <video
