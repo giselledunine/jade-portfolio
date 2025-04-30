@@ -6,14 +6,12 @@ import {
     Scroll,
     MeshPortalMaterial,
     Text,
-    CameraControls,
     Preload,
     useScroll,
 } from "@react-three/drei";
 // import { Slider } from "./components/ui/slider";
 // import { useProgress } from "@react-three/drei";
 import gsap from "gsap";
-import * as THREE from "three";
 
 function App() {
     const [value, setValue] = useState(0);
@@ -21,8 +19,6 @@ function App() {
     const [active, setActive] = useState(0);
     const videoRef = useRef<HTMLVideoElement>(null);
     const loadingDivRef = useRef<HTMLDivElement>(null);
-    const nameRef = useRef<HTMLElement>(null);
-    const regular = import("@/fonts/MinionPro-Bold.otf");
     // const { progress } = useProgress();
 
     const handleLoadedMetadata = () => {
@@ -233,13 +229,13 @@ const ProjectPortal = ({
 }) => {
     const scroll = useScroll();
     console.log("scroll", scroll);
-    const portalMaterialRef = useRef<typeof MeshPortalMaterial>(null);
+    const portalMaterialRef = useRef<any>(null);
     const handleActive = (id: number) => {
         setActive(id);
     };
 
     useEffect(() => {
-        if (active === 1) {
+        if (active === 1 && portalMaterialRef.current) {
             gsap.to(portalMaterialRef.current, {
                 blend: 1,
                 duration: 0.3,
