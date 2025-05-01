@@ -28,7 +28,7 @@ function App() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const loadingDivRef = useRef<HTMLDivElement>(null);
     const linksRef = useRef<HTMLDivElement>(null);
-    const backRef = useRef<HTMLDivElement>(null);
+    const backRef = useRef<HTMLAnchorElement>(null);
     // const { progress } = useProgress();
 
     const handleLoadedMetadata = () => {
