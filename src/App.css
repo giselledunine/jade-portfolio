@@ -59,7 +59,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(98.74% 0.019818838372144574 150.11039197367188);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -131,7 +131,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-display;
   }
 }
 
@@ -141,11 +141,11 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
-    display: none;
+    /*display: none;*/
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 * {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+     /*-ms-overflow-style: none;  IE and Edge */
+   /*scrollbar-width: none;   Firefox */
 }
