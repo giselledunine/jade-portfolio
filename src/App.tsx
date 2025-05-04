@@ -15,7 +15,6 @@ import {
     Text,
     Preload,
     useScroll,
-    CameraControls,
 } from "@react-three/drei";
 // import { Slider } from "./components/ui/slider";
 // import { useProgress } from "@react-three/drei";
@@ -306,23 +305,21 @@ function App() {
                         infos={print}
                         setActive={setActive}></ProjectPortal>
                 ))}
-                {/* <ScrollControls damping={0.3} pages={2} enabled={true}>
+                <ScrollControls damping={0.3} pages={2} enabled={true}>
                     <StaticScrollElements></StaticScrollElements>
-                    <Scroll> 
+                    <Scroll>
                         {prints.map((print: PrintType) => (
                             <ProjectPortal
                                 active={active}
                                 infos={print}
                                 setActive={setActive}></ProjectPortal>
                         ))}
-                     </Scroll> 
+                    </Scroll>
                     <Scroll html style={{ width: "100%" }}>
-                        <div style={{ height: "200vh" }}>
-                             Contenu HTML ici 
-                        </div>
-                    </Scroll> 
-                 </ScrollControls>*/}
-                {/* <CameraMouv active={active}></CameraMouv> */}
+                        <div style={{ height: "200vh" }}>Contenu HTML ici</div>
+                    </Scroll>
+                </ScrollControls>
+                <CameraMouv active={active}></CameraMouv>
                 <Preload all></Preload>
             </Canvas>
         </div>
@@ -333,7 +330,6 @@ function CameraMouv({ active }: { active: string }) {
     const { scene } = useThree();
     // const { el } = useScroll();
     const object = scene.getObjectByName(active);
-    const currentObject = object;
 
     useEffect(() => {
         if (object?.type !== "Scene") {

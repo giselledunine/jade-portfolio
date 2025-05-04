@@ -37,7 +37,7 @@ type PrintType = {
 
 export default function App() {
     const [active, setActive] = useState("");
-    const [prints, setPrints] = useState<PrintType[]>([
+    const prints: PrintType[] = [
         {
             title: "La liste Rouge",
             date: "2023",
@@ -99,7 +99,7 @@ export default function App() {
                 },
             ],
         },
-    ]);
+    ];
 
     useEffect(() => {
         prints.map((print) => {
