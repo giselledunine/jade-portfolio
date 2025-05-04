@@ -5,6 +5,7 @@
 
 @theme {
   --font-display: "Minion", "sans-serif";
+  --shadow-3xl: 0 9px 37px 53px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 24px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
 }
 
 @font-face {
@@ -59,7 +60,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(98.74% 0.019818838372144574 150.11039197367188);
+  --background: oklch(1 0.0144 106.66);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -67,11 +68,11 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(1 0.0144 106.66);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.71 0.233073 143.4304);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -141,11 +142,11 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
-    /*display: none;*/
+    display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 * {
-     /*-ms-overflow-style: none;  IE and Edge */
-   /*scrollbar-width: none;   Firefox */
+     -ms-overflow-style: none; 
+    scrollbar-width: none;  
 }
