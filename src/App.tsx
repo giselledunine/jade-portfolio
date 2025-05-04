@@ -15,16 +15,97 @@ import {
     Text,
     Preload,
     useScroll,
+    CameraControls,
 } from "@react-three/drei";
 // import { Slider } from "./components/ui/slider";
 // import { useProgress } from "@react-three/drei";
 import gsap from "gsap";
 import * as THREE from "three";
 
+type PrintType = {
+    title: string;
+    date: string;
+    position: THREE.Vector3;
+    arts: {
+        position: THREE.Vector3;
+        texture: string;
+        loadedTexture?: THREE.Texture;
+        planeSize?: {
+            width: number;
+            height: number;
+        };
+    }[];
+};
+
 function App() {
     const [value, setValue] = useState(0);
     const [duration, setDuration] = useState(0);
     const [active, setActive] = useState("");
+    const prints: PrintType[] = [
+        {
+            title: "La liste Rouge",
+            date: "2023",
+            position: new THREE.Vector3(0, -1.5, 0),
+            arts: [
+                {
+                    position: new THREE.Vector3(0, 0, 0),
+                    texture: "/redLine1.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/redLine2.png",
+                },
+            ],
+        },
+        {
+            title: "Viri",
+            date: "2023",
+            position: new THREE.Vector3(0, -6, 0),
+            arts: [
+                {
+                    position: new THREE.Vector3(0, 0, 0),
+                    texture: "/Viri1.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri2.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri3.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri4.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri5.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri6.png",
+                },
+
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri7.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri8.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri9.png",
+                },
+                {
+                    position: new THREE.Vector3(2, -1, -5),
+                    texture: "/Viri10.png",
+                },
+            ],
+        },
+    ];
     const videoRef = useRef<HTMLVideoElement>(null);
     const loadingDivRef = useRef<HTMLDivElement>(null);
     const linksRef = useRef<HTMLDivElement>(null);
@@ -165,7 +246,7 @@ function App() {
                 ease: "power3.inOut",
             });
         }
-    });
+    }, [active]);
 
     return (
         <div className="w-[100vw] h-[100vh] touch-pan-y">
@@ -201,41 +282,47 @@ function App() {
                         {"< back"}
                     </a>
                 </div>
-                <div ref={linksRef} className="flex gap-4">
-                    <a>Print</a>
-                    <a>Branding</a>
-                    <a>Photographie</a>
-                    <a>Art</a>
+                <div ref={linksRef} className="flex gap-4 mr-4">
+                    <a className="hover:text-accent hover:cursor-pointer">
+                        Print
+                    </a>
+                    <a className="hover:text-accent hover:cursor-pointer">
+                        Branding
+                    </a>
+                    <a className="hover:text-accent hover:cursor-pointer">
+                        Photographie
+                    </a>
+                    <a className="hover:text-accent hover:cursor-pointer">
+                        Art
+                    </a>
                 </div>
             </div>
             <Canvas camera={{ fov: 75, position: [0, 0, 5] }}>
                 <ambientLight intensity={1}></ambientLight>
                 <color attach="background" args={["#F2FFF4"]} />
-                <ScrollControls damping={0.3} pages={2} enabled={true}>
+                {prints.map((print: PrintType) => (
+                    <ProjectPortal
+                        active={active}
+                        infos={print}
+                        setActive={setActive}></ProjectPortal>
+                ))}
+                {/* <ScrollControls damping={0.3} pages={2} enabled={true}>
                     <StaticScrollElements></StaticScrollElements>
-                    <Scroll>
-                        <ProjectPortal
-                            name="01"
-                            position={new THREE.Vector3(0, -1.5, 0)}
-                            active={active}
-                            title={"La Liste Rouge"}
-                            date={"2023"}
-                            setActive={setActive}></ProjectPortal>
-                        <ProjectPortal
-                            name="02"
-                            position={new THREE.Vector3(0, -6, 0)}
-                            active={active}
-                            title={"Viri"}
-                            date="2023"
-                            setActive={setActive}></ProjectPortal>
-                    </Scroll>
+                    <Scroll> 
+                        {prints.map((print: PrintType) => (
+                            <ProjectPortal
+                                active={active}
+                                infos={print}
+                                setActive={setActive}></ProjectPortal>
+                        ))}
+                     </Scroll> 
                     <Scroll html style={{ width: "100%" }}>
                         <div style={{ height: "200vh" }}>
-                            {/* Contenu HTML ici */}
+                             Contenu HTML ici 
                         </div>
-                    </Scroll>
-                    <CameraMouv active={active}></CameraMouv>
-                </ScrollControls>
+                    </Scroll> 
+                 </ScrollControls>*/}
+                {/* <CameraMouv active={active}></CameraMouv> */}
                 <Preload all></Preload>
             </Canvas>
         </div>
@@ -243,90 +330,94 @@ function App() {
 }
 
 function CameraMouv({ active }: { active: string }) {
-    const { camera, scene } = useThree();
-    console.log("scene", scene);
-    const { el } = useScroll();
+    const { scene } = useThree();
+    // const { el } = useScroll();
+    const object = scene.getObjectByName(active);
+    const currentObject = object;
 
     useEffect(() => {
-        const object = scene.getObjectByName(active);
-
-        if (object && active !== "") {
-            // gsap.to(camera.position, {
-            //     x: 0,
-            //     y: 0,
-            //     z: 2,
-            //     duration: 0.8,
-            //     ease: "power3.inOut",
-            // });
+        if (object?.type !== "Scene") {
+            if (object)
+                gsap.to(object.position, {
+                    z: 2,
+                    duration: 0.8,
+                    ease: "power3.inOut",
+                });
         } else {
-            gsap.to(el, {
-                scrollTop: 0,
-                duration: 0.8,
-                ease: "power3.inOut",
-            });
-            // gsap.to(camera.position, {
-            //     x: 0,
-            //     y: 0,
-            //     z: 5,
+            // gsap.to(el, {
+            //     scrollTop: 0,
             //     duration: 0.8,
             //     ease: "power3.inOut",
             // });
+            // if (object)
+            //     gsap.to(object.position, {
+            //         z: 0,
+            //         duration: 0.8,
+            //         ease: "power3.inOut",
+            //     });
         }
-    }, [active, camera, scene]);
+    }, [active, object]);
     return <></>;
 }
 
 const ProjectPortal = ({
     active,
     setActive,
-    position,
-    date,
-    title,
-    name,
+    infos,
 }: {
     active: string;
     setActive: Dispatch<SetStateAction<string>>;
-    position: THREE.Vector3;
-    title: string;
-    date: string;
-    name: string;
+    infos: PrintType;
 }) => {
     const [hover, setHover] = useState(false);
     const portalMaterialRef = useRef<any>(null);
     const planeRef = useRef<THREE.Mesh>(null);
-    const [textures, setTextures] = useState<{ [key: string]: THREE.Texture }>(
-        {}
-    );
-    const [textureSizes, setTextureSizes] = useState<{
-        [key: string]: { width: number; height: number };
-    }>({});
+    const [textures, setTextures] = useState<
+        {
+            loadedTexture: THREE.Texture;
+            planeSize: { width: number; height: number };
+            position: THREE.Vector3;
+        }[]
+    >([]);
+    const [texturesLoaded, setTexturesLoaded] = useState(false);
+    const { invalidate } = useThree();
 
     useEffect(() => {
         const textureLoader = new THREE.TextureLoader();
-        const textureUrls = {
-            redLine: "/redLine1.png",
-            redLine2: "/redLine2.png",
-        };
 
-        Object.entries(textureUrls).forEach(([key, url]) => {
-            textureLoader.load(url, (loadedTexture) => {
-                setTextures((prev) => ({
-                    ...prev,
-                    [key]: loadedTexture,
-                }));
-                // Calculer le ratio d'aspect de la texture
-                const image = loadedTexture.image;
-                const aspectRatio = image.width / image.height;
-                setTextureSizes((prev) => ({
-                    ...prev,
-                    [key]: {
-                        width: 1, // Largeur de base
-                        height: 1 / aspectRatio, // Hauteur ajustée selon le ratio
-                    },
-                }));
-            });
+        let loadedCount = 0;
+        const totalTextures = Object.keys(infos.arts).length;
+
+        infos.arts.forEach((art) => {
+            textureLoader.load(
+                art.texture,
+                (loadedTexture) => {
+                    loadedTexture.needsUpdate = true;
+                    const image = loadedTexture.image;
+                    const aspectRatio = image.width / image.height;
+                    const temp = {
+                        loadedTexture,
+                        planeSize: { width: 1, height: 1 / aspectRatio },
+                        position: art.position,
+                    };
+                    setTextures((prev) => [...prev, temp]);
+
+                    loadedCount++;
+                    if (loadedCount === totalTextures) {
+                        setTexturesLoaded(true);
+                        invalidate(); // Force le rendu à se mettre à jour
+                    }
+                },
+                undefined,
+                (error) => {
+                    console.error(
+                        `Erreur de chargement de la texture ${art.texture}:`,
+                        error
+                    );
+                }
+            );
         });
-    }, []);
+    }, [invalidate]);
 
     const handleActive = (name: string) => {
         if (active !== name) {
@@ -335,39 +426,56 @@ const ProjectPortal = ({
     };
 
     useEffect(() => {
-        if (active === name && portalMaterialRef.current) {
-            gsap.to(portalMaterialRef.current, {
-                blend: 1,
-                duration: 0.3,
-                delay: 0.1,
-                ease: "power1.inOut",
-            });
-        } else if (portalMaterialRef.current) {
-            gsap.to(portalMaterialRef.current, {
-                blend: 0,
-                duration: 0.3,
-                delay: 0.1,
-                ease: "power1.inOut",
-            });
+        console.log("blend");
+        if (active === infos.title) {
+            if (portalMaterialRef.current && planeRef.current) {
+                gsap.to(portalMaterialRef.current, {
+                    blend: 1,
+                    duration: 0.3,
+                    delay: 0.1,
+                    ease: "power1.inOut",
+                });
+                gsap.to(planeRef.current.position, {
+                    z: 3,
+                    duration: 0.3,
+                    delay: 0.1,
+                    ease: "power1.inOut",
+                });
+            }
+        } else {
+            if (portalMaterialRef.current && planeRef.current) {
+                gsap.to(portalMaterialRef.current, {
+                    blend: 0,
+                    duration: 0.3,
+                    delay: 0.1,
+                    ease: "power1.inOut",
+                });
+                // gsap.to(planeRef.current.position, {
+                //     z: 0,
+                //     duration: 0.3,
+                //     delay: 0.1,
+                //     ease: "power1.inOut",
+                // });
+            }
         }
-    }, [active, name]);
+    }, [active, infos.title]);
 
     useEffect(() => {
-        if (hover && planeRef.current) {
-            gsap.to(planeRef.current.scale, {
-                x: 1.2,
-                y: 1.2,
-                duration: 0.5,
-                ease: "power3.inOut",
-            });
-        } else if (planeRef.current) {
-            gsap.to(planeRef.current.scale, {
-                x: 1,
-                y: 1,
-                duration: 0.5,
-                ease: "power3.inOut",
-            });
-        }
+        // if (hover && planeRef.current) {
+        //     gsap.to(planeRef.current.scale, {
+        //         x: 1.2,
+        //         y: 1.2,
+        //         duration: 0.5,
+        //         ease: "power3.inOut",
+        //     });
+        // } else if (planeRef.current) {
+        //     gsap.to(planeRef.current.scale, {
+        //         x: 1,
+        //         y: 1,
+        //         duration: 0.5,
+        //         ease: "power3.inOut",
+        //     });
+        // }
     }, [hover]);
 
     return (
@@ -376,31 +484,39 @@ const ProjectPortal = ({
                 font="/MinionPro-Bold.otf"
                 fontSize={0.4}
                 color={"#F0F0F0"}
-                position={[position.x - 2.65, position.y + 1.7, 0.01]}
+                position={[
+                    infos.position.x - 2.65,
+                    infos.position.y + 1.7,
+                    0.1,
+                ]}
                 material-toneMapped={false}
                 anchorY="top"
                 anchorX="left">
-                {title}
+                {infos.title}
             </Text>
             <Text
                 font="/MinionPro-Bold.otf"
                 fontSize={0.2}
                 color={"#F0F0F0"}
                 lineHeight={0.8}
-                position={[position.x - 2.25, position.y + 1.2, 0.01]}
+                position={[
+                    infos.position.x - 2.65,
+                    infos.position.y + 1.2,
+                    0.1,
+                ]}
                 material-toneMapped={false}
                 anchorY="top"
-                anchorX="right">
-                {date}
+                anchorX="left">
+                {infos.date}
             </Text>
             <mesh
-                name={name}
+                name={infos.title}
                 ref={planeRef}
-                position={position}
+                position={infos.position}
                 onPointerEnter={() => setHover(true)}
                 onPointerLeave={() => setHover(false)}
                 onDoubleClick={(e) => (
-                    e.stopPropagation(), handleActive(name)
+                    e.stopPropagation(), handleActive(infos.title)
                 )}>
                 <planeGeometry args={[6, 4]} />
                 <MeshPortalMaterial
@@ -411,24 +527,25 @@ const ProjectPortal = ({
                     <color attach="background" args={["#000000"]} />
                     <ambientLight intensity={0.5} />
                     <directionalLight position={[5, 5, 5]} intensity={1} />
-                    <mesh position={[0, 0, 0]}>
-                        <planeGeometry
-                            args={[
-                                textureSizes.redLine?.width || 1,
-                                textureSizes.redLine?.height || 1,
-                            ]}
-                        />
-                        <meshStandardMaterial map={textures.redLine} />
-                    </mesh>
-                    <mesh position={[2, -1, -5]}>
-                        <planeGeometry
-                            args={[
-                                textureSizes.redLine2?.width || 1,
-                                textureSizes.redLine2?.height || 1,
-                            ]}
-                        />
-                        <meshStandardMaterial map={textures.redLine2} />
-                    </mesh>
+                    {textures &&
+                        texturesLoaded &&
+                        textures.map((texture, idx) => (
+                            <mesh
+                                key={`${idx}_texture`}
+                                position={texture.position}
+                                scale={1.5}>
+                                <planeGeometry
+                                    args={[
+                                        texture.planeSize?.width || 1,
+                                        texture.planeSize?.height || 1,
+                                    ]}
+                                />
+                                <meshStandardMaterial
+                                    map={texture.loadedTexture}
+                                    needsUpdate={true}
+                                />
+                            </mesh>
+                        ))}
                 </MeshPortalMaterial>
             </mesh>
         </group>
@@ -447,8 +564,8 @@ const StaticScrollElements = () => {
                     titleRef.current.position,
                     {
                         z: -6,
-                        duration: 1,
-                        ease: "power3.inOut",
+                        duration: 0.5,
+                        ease: "power1.inOut",
                     },
                     0
                 )
@@ -456,8 +573,8 @@ const StaticScrollElements = () => {
                     titleRef.current.material,
                     {
                         opacity: 0,
-                        duration: 1,
-                        ease: "power3.inOut",
+                        duration: 0.2,
+                        ease: "power1.inOut",
                     },
                     0
                 );
