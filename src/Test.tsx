@@ -2,7 +2,14 @@ import { Scroll, ScrollControls, useScroll, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import "./App.css";
 import * as THREE from "three";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+    Dispatch,
+    SetStateAction,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import gsap from "gsap";
 import LoadingAnimation from "./components/LoadingAnimation";
 import Header from "./components/Header";
@@ -37,6 +44,14 @@ export default function App() {
                     {
                         position: new THREE.Vector3(2, -1, -5),
                         texture: "/redLine2.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/redLine3.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/redLine4.png",
                     },
                 ],
             },
@@ -87,27 +102,61 @@ export default function App() {
                     },
                 ],
             },
+            {
+                title: "Mémoire",
+                date: "2023",
+                arts: [
+                    {
+                        position: new THREE.Vector3(0, 0, 0),
+                        texture: "/Memoire1.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Memoire2.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Memoire3.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Memoire4.png",
+                    },
+                ],
+            },
+            {
+                title: "Composite",
+                date: "2023",
+                arts: [
+                    {
+                        position: new THREE.Vector3(0, 0, 0),
+                        texture: "/Composite1.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Composite2.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Composite3.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Composite4.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Composite5.png",
+                    },
+                    {
+                        position: new THREE.Vector3(2, -1, -5),
+                        texture: "/Composite6.png",
+                    },
+                ],
+            },
         ],
         []
     );
-
-    // useEffect(() => {
-    //     prints.map((print) => {
-    //         return print.arts.map((art, idx) => {
-    //             const newPosition = new THREE.Vector3(
-    //                 (Math.random() * 2 - 1) * idx * 0.5,
-    //                 (Math.random() * 2 - 1) * idx * 0.5,
-    //                 -idx
-    //             );
-    //             art.position = newPosition;
-    //             return art;
-    //         });
-    //     });
-    // }, []);
-
-    useEffect(() => {
-        console.log("rcharge prints");
-    }, []);
 
     return (
         <div className="h-[100vh] w-[100vw]">
@@ -115,25 +164,27 @@ export default function App() {
             <Header active={active} setActive={setActive}></Header>
             <Canvas>
                 <color attach={"background"} args={["#FFFFF4"]}></color>
-                <ScrollControls pages={2} damping={0.3}>
-                    <StaticScrollElements></StaticScrollElements>
-                    <Scroll>
-                        {prints.map((print, idx) => (
-                            <ProjectPortal
-                                key={`portal-${idx}`}
-                                print={print}
-                                idx={idx}
-                                active={active}
-                                setActive={setActive}></ProjectPortal>
-                        ))}
-                    </Scroll>
+                <ScrollControls pages={5} damping={0.3}>
+                    <StaticScrollElements
+                        prints={prints}
+                        active={active}
+                        setActive={setActive}></StaticScrollElements>
+                    <Scroll></Scroll>
                 </ScrollControls>
             </Canvas>
         </div>
     );
 }
 
-const StaticScrollElements = () => {
+const StaticScrollElements = ({
+    prints,
+    active,
+    setActive,
+}: {
+    prints: PrintType[];
+    active: string;
+    setActive: Dispatch<SetStateAction<string>>;
+}) => {
     const scroll = useScroll();
     const titleRef = useRef<THREE.Mesh>(null);
     const tl = useRef(gsap.timeline({ paused: true }));
@@ -167,12 +218,23 @@ const StaticScrollElements = () => {
         tl.current.seek(scroll.offset * tl.current.duration());
     });
     return (
-        <Text
-            ref={titleRef}
-            position={[-5, 3, -3]}
-            color={"#000000"}
-            fontSize={2}>
-            Print
-        </Text>
+        <>
+            <Text
+                ref={titleRef}
+                position={[-5, 3, -3]}
+                color={"#000000"}
+                fontSize={2}>
+                Print
+            </Text>
+            {prints.map((print, idx) => (
+                <ProjectPortal
+                    printslength={prints.length}
+                    key={`portal-${idx}`}
+                    print={print}
+                    idx={idx}
+                    active={active}
+                    setActive={setActive}></ProjectPortal>
+            ))}
+        </>
     );
 };
