@@ -4,12 +4,11 @@ import {
     useRef,
     useState,
     useMemo,
-    useLayoutEffect,
     useEffect,
 } from "react";
 import { PrintType } from "@/Test";
 import { useScroll, MeshPortalMaterial, Text } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -30,8 +29,8 @@ export default function ProjectPortal({
     const meshPortalRef = useRef<any>(null);
     const portalRef = useRef<THREE.Mesh>(null);
     const scroll = useScroll();
-    const { scene } = useThree();
-    const lastScroll = useRef(0);
+    // const { scene } = useThree();
+    // const lastScroll = useRef(0);
     const [hover, setHover] = useState(false);
     const [textures, setTextures] = useState<
         {
@@ -104,15 +103,16 @@ export default function ProjectPortal({
                     idx + 2.5
                 );
         } else {
-            tl.current.to(
-                portalRef.current.position,
-                {
-                    duration: printslength - idx + 1,
-                    y: 0,
-                    ease: "power3.out",
-                },
-                idx + 1.5
-            );
+            if (portalRef.current)
+                tl.current.to(
+                    portalRef.current.position,
+                    {
+                        duration: printslength - idx + 1,
+                        y: 0,
+                        ease: "power3.out",
+                    },
+                    idx + 1.5
+                );
         }
         //     // Attendre que le portail soit ouvert
         //     if (active === print.title) {
