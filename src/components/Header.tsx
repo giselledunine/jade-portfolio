@@ -1,10 +1,9 @@
 import gsap from "gsap";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { AnimatedLink } from "./AnimateLink";
 
 export default function Header({
-    setActive,
+    //    setActive,
     active,
 }: {
     active?: string;

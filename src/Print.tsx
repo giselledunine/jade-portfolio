@@ -5,15 +5,12 @@ import * as THREE from "three";
 import {
     Dispatch,
     SetStateAction,
-    useEffect,
     useLayoutEffect,
     useMemo,
     useRef,
     useState,
 } from "react";
 import gsap from "gsap";
-import LoadingAnimation from "./components/LoadingAnimation";
-import Header from "./components/Header";
 import ProjectPortal from "./components/ProjectPortal";
 
 export type PrintType = {
