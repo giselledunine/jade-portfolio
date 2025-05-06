@@ -5,6 +5,7 @@ import * as THREE from "three";
 import {
     Dispatch,
     SetStateAction,
+    useEffect,
     useLayoutEffect,
     useMemo,
     useRef,
@@ -29,7 +30,7 @@ export type PrintType = {
     }[];
 };
 
-export default function App() {
+export default function Print() {
     const [active, setActive] = useState("");
     const prints: PrintType[] = useMemo(
         () => [
@@ -160,8 +161,6 @@ export default function App() {
 
     return (
         <div className="h-[100vh] w-[100vw]">
-            <LoadingAnimation></LoadingAnimation>
-            <Header active={active} setActive={setActive}></Header>
             <Canvas>
                 <color attach={"background"} args={["#FFFFF4"]}></color>
                 <ScrollControls pages={5} damping={0.3}>
@@ -188,6 +187,7 @@ const StaticScrollElements = ({
     const scroll = useScroll();
     const titleRef = useRef<THREE.Mesh>(null);
     const tl = useRef(gsap.timeline({ paused: true }));
+    const starRef = useRef<THREE.Mesh>(null);
 
     //maybe add the portals here so they don't scroll and animate the mouvement with the tl
 
@@ -207,7 +207,7 @@ const StaticScrollElements = ({
                     titleRef.current.material,
                     {
                         opacity: 0,
-                        duration: 0.1,
+                        duration: 0.09,
                         ease: "power1.inOut",
                     },
                     0
@@ -217,6 +217,50 @@ const StaticScrollElements = ({
     useFrame(() => {
         tl.current.seek(scroll.offset * tl.current.duration());
     });
+
+    useLayoutEffect(() => {
+        if (starRef.current)
+            tl.current
+                .to(
+                    starRef.current.position,
+                    {
+                        x: 4,
+                        y: -2,
+                        duration: 1,
+                    },
+                    0
+                )
+                .to(
+                    starRef.current.scale,
+                    {
+                        x: 6,
+                        y: 6,
+                        duration: 1,
+                    },
+                    0
+                )
+                .to(
+                    starRef.current.position,
+                    {
+                        x: -2,
+                        y: 3,
+                        duration: 1,
+                    },
+                    1
+                )
+                .to(
+                    starRef.current.scale,
+                    {
+                        x: 4,
+                        y: 4,
+                        duration: 1,
+                    },
+                    1
+                );
+    }, []);
+
+    const textureLoader = new THREE.TextureLoader();
+    const starTexture = textureLoader.load("/star.png");
     return (
         <>
             <Text
@@ -226,6 +270,12 @@ const StaticScrollElements = ({
                 fontSize={2}>
                 Print
             </Text>
+            <mesh ref={starRef} position={[3, 2, -1]}>
+                <planeGeometry args={[1, 1]}></planeGeometry>
+                <meshBasicMaterial
+                    map={starTexture}
+                    transparent={true}></meshBasicMaterial>
+            </mesh>
             {prints.map((print, idx) => (
                 <ProjectPortal
                     printslength={prints.length}

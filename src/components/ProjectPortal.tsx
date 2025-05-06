@@ -6,7 +6,7 @@ import {
     useMemo,
     useEffect,
 } from "react";
-import { PrintType } from "@/Test";
+import { PrintType } from "@/Print";
 import { useScroll, MeshPortalMaterial, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -49,6 +49,7 @@ export default function ProjectPortal({
     const meshRefs = useRef<Array<THREE.Mesh | null>>([]);
 
     useEffect(() => {
+        tl.current = gsap.timeline({ paused: true });
         console.log("timeline", tl.current, idx);
         if (portalRef.current)
             tl.current
@@ -115,43 +116,45 @@ export default function ProjectPortal({
                 );
         }
         //     // Attendre que le portail soit ouvert
-        //     if (active === print.title) {
-        //         // Petit délai pour s'assurer que les meshes sont chargés
-        //         textures.forEach((texture, i) => {
-        //             const mesh = meshRefs.current[i];
-        //             console.log("mesh", mesh);
-        //             if (mesh) {
-        //                 tl.current
-        //                     .to(
-        //                         mesh.position,
-        //                         {
-        //                             z: 0,
-        //                             x: 0,
-        //                             y: 0,
-        //                             duration: 1,
-        //                             ease: "power2.out",
-        //                         },
-        //                         i
-        //                     )
-        //                     .to(
-        //                         mesh.position,
-        //                         {
-        //                             y:
-        //                                 texture.position.y === 0
-        //                                     ? texture.position.y + 2
-        //                                     : texture.position.y,
-        //                             duration: 1,
-        //                             ease: "power2.out",
-        //                         },
-        //                         i + 1
-        //                     );
-        //             }
-        //         });
-        //     }
+        if (active === print.title) {
+            // Petit délai pour s'assurer que les meshes sont chargés
+            textures.forEach((texture, i) => {
+                const mesh = meshRefs.current[i];
+                console.log("mesh", mesh);
+                if (mesh) {
+                    tl.current
+                        .to(
+                            mesh.position,
+                            {
+                                z: 0,
+                                x: 0,
+                                y: 0,
+                                duration: 1,
+                                ease: "power2.out",
+                            },
+                            i
+                        )
+                        .to(
+                            mesh.position,
+                            {
+                                y:
+                                    texture.position.y === 0
+                                        ? texture.position.y + 2
+                                        : texture.position.y,
+                                duration: 1,
+                                ease: "power2.out",
+                            },
+                            i + 1
+                        );
+                }
+            });
+        }
     }, [idx, print.title]);
 
     useFrame(() => {
-        tl.current.seek(scroll.offset * tl.current.duration());
+        if (tl.current && tl.current.duration() > 0 && active === "") {
+            tl.current.seek(scroll.offset * tl.current.duration());
+        }
     });
 
     useEffect(() => {
@@ -230,73 +233,73 @@ export default function ProjectPortal({
         asyncTextureLoading();
     }, [print.arts]);
 
-    // useEffect(() => {
-    //     if (
-    //         active === print.title &&
-    //         meshPortalRef.current &&
-    //         portalRef.current &&
-    //         groupObject.current
-    //     ) {
-    //         lastScroll.current = scroll.offset * scroll.el.scrollHeight;
-    //         meshRefs.current.forEach((ref) => {
-    //             if (ref?.position) {
-    //                 gsap.to(ref.position, {
-    //                     x:
-    //                         ref.position.x === 0
-    //                             ? ref.position.x
-    //                             : ref.position.x * 2,
-    //                     y:
-    //                         ref.position.y === 0
-    //                             ? ref.position.y
-    //                             : ref.position.y * 2,
-    //                     duration: 0.8,
-    //                     ease: "power3.inOut",
-    //                 });
-    //             }
-    //         });
+    useEffect(() => {
+        if (
+            active === print.title &&
+            meshPortalRef.current &&
+            portalRef.current &&
+            groupObject.current
+        ) {
+            //lastScroll.current = scroll.offset * scroll.el.scrollHeight;
+            meshRefs.current.forEach((ref) => {
+                if (ref?.position) {
+                    gsap.to(ref.position, {
+                        x:
+                            ref.position.x === 0
+                                ? ref.position.x
+                                : ref.position.x * 2,
+                        y:
+                            ref.position.y === 0
+                                ? ref.position.y
+                                : ref.position.y * 2,
+                        duration: 0.8,
+                        ease: "power3.inOut",
+                    });
+                }
+            });
 
-    //         gsap.to(meshPortalRef.current, {
-    //             blend: 1,
-    //             delay: 0.5,
-    //             duration: 0.3,
-    //             ease: "power1.inOut",
-    //         });
-    //         gsap.to(portalRef.current.position, {
-    //             z: 4,
-    //             duration: 0.8,
-    //             ease: "power3.inOut",
-    //         });
-    //         gsap.to(groupObject.current.position, {
-    //             z: 0,
-    //             duration: 0.8,
-    //             ease: "power3.inOut",
-    //         });
-    //     } else if (active === "" && portalRef.current && groupObject.current) {
-    //         gsap.to(meshPortalRef.current, {
-    //             blend: 0,
-    //             delay: 0.5,
-    //             duration: 0.3,
-    //             ease: "power1.inOut",
-    //         });
-    //         gsap.to(portalRef.current.position, {
-    //             z: 0,
-    //             delay: 0.5,
-    //             duration: 0.8,
-    //             ease: "power3.inOut",
-    //         });
-    //         gsap.to(groupObject.current.position, {
-    //             z: 2,
-    //             duration: 0.8,
-    //             delay: 0.8,
-    //             ease: "power3.inOut",
-    //         });
-    //         // gsap.to(scroll.el, {
-    //         //     scrollTop: lastScroll.current,
-    //         //     duration: 0.8,
-    //         //     ease: "power3.inOut",
-    //         // });
-    //     }
-    // }, [active, print.title, scroll.offset, scroll.el]);
+            gsap.to(meshPortalRef.current, {
+                blend: 1,
+                delay: 0.5,
+                duration: 0.3,
+                ease: "power1.inOut",
+            });
+            gsap.to(portalRef.current.position, {
+                z: 4,
+                duration: 0.8,
+                ease: "power3.inOut",
+            });
+            gsap.to(groupObject.current.position, {
+                z: 0,
+                duration: 0.8,
+                ease: "power3.inOut",
+            });
+        } else if (active === "" && portalRef.current && groupObject.current) {
+            gsap.to(meshPortalRef.current, {
+                blend: 0,
+                delay: 0.5,
+                duration: 0.3,
+                ease: "power1.inOut",
+            });
+            gsap.to(portalRef.current.position, {
+                z: 0,
+                delay: 0.5,
+                duration: 0.8,
+                ease: "power3.inOut",
+            });
+            gsap.to(groupObject.current.position, {
+                z: 2,
+                duration: 0.8,
+                delay: 0.8,
+                ease: "power3.inOut",
+            });
+            // gsap.to(scroll.el, {
+            //     scrollTop: lastScroll.current,
+            //     duration: 0.8,
+            //     ease: "power3.inOut",
+            // });
+        }
+    }, [active, print.title, scroll.offset, scroll.el]);
 
     return (
         <group
@@ -353,7 +356,9 @@ export default function ProjectPortal({
                                         ]}></planeGeometry>
                                     <meshBasicMaterial
                                         side={2}
+                                        //color={new THREE.Color("red")}
                                         map={texture.loadedTexture}
+                                        transparent={false}
                                     />
                                 </mesh>
                             ))}

@@ -1,15 +1,18 @@
 import gsap from "gsap";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AnimatedLink } from "./AnimateLink";
 
 export default function Header({
     setActive,
     active,
 }: {
-    active: string;
-    setActive: Dispatch<SetStateAction<string>>;
+    active?: string;
+    setActive?: Dispatch<SetStateAction<string>>;
 }) {
     const headerRef = useRef<HTMLDivElement>(null);
     const backRef = useRef<HTMLAnchorElement>(null);
+
     useEffect(() => {
         if (active !== "") {
             gsap.to(headerRef.current, {
@@ -58,13 +61,14 @@ export default function Header({
                     src="/iconJadePortfolio.svg"></img>
                 <a
                     ref={backRef}
-                    onClick={() => setActive("")}
+                    //onClick={() => setActive("")}
                     className="hover:cursor-pointer">
                     {"< back"}
                 </a>
             </div>
-            <div className="flex gap-4 mr-4">
-                <p className="hover:text-accent hover:cursor-pointer">Print</p>
+            <div className="flex gap-4 mr-4 text-primary">
+                <AnimatedLink to={"/"}>Home</AnimatedLink>
+                <AnimatedLink to={"/print"}>print</AnimatedLink>
                 <a className="hover:text-accent hover:cursor-pointer">
                     Branding
                 </a>
