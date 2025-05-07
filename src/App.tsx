@@ -422,7 +422,6 @@ const ProjectPortal = ({
     };
 
     useEffect(() => {
-        console.log("blend");
         if (active === infos.title) {
             if (portalMaterialRef.current && planeRef.current) {
                 gsap.to(portalMaterialRef.current, {

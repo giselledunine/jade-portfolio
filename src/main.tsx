@@ -4,11 +4,12 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import Routing from "./Routing.tsx";
 
-createRoot(document.getElementById("root")!).render(
+const container = document.getElementById("root")!;
+const root = createRoot(container);
+root.render(
     // <StrictMode>
     <BrowserRouter>
         <Routing />
     </BrowserRouter>
-
     // </StrictMode>
 );
