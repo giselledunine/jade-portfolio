@@ -6,8 +6,8 @@ import Home from "./Home";
 export default function Routing() {
     return (
         <Routes>
-            <Route path="/" element={<Layout />}>
-                <Route path="" element={<Home />} />
+            <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
                 <Route path="/print" element={<Test />} />
             </Route>
         </Routes>
