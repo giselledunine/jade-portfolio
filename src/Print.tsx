@@ -1,5 +1,5 @@
-import { Scroll, ScrollControls, useScroll, Text } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useScroll, Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import "./App.css";
 import * as THREE from "three";
 import {
