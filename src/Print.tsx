@@ -5,6 +5,7 @@ import * as THREE from "three";
 import {
     Dispatch,
     SetStateAction,
+    useEffect,
     useLayoutEffect,
     useMemo,
     useRef,
@@ -156,19 +157,18 @@ export default function Print() {
         []
     );
 
+    useEffect(() => {
+        console.log("mounted");
+        return () => console.log("unmounted");
+    });
+
     return (
-        <div className="h-[100vh] w-[100vw]">
-            <Canvas>
-                <color attach={"background"} args={["#FFFFF4"]}></color>
-                <ScrollControls pages={5} damping={0.3}>
-                    <StaticScrollElements
-                        prints={prints}
-                        active={active}
-                        setActive={setActive}></StaticScrollElements>
-                    <Scroll></Scroll>
-                </ScrollControls>
-            </Canvas>
-        </div>
+        <>
+            <StaticScrollElements
+                prints={prints}
+                active={active}
+                setActive={setActive}></StaticScrollElements>
+        </>
     );
 }
 
