@@ -1,41 +1,26 @@
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
-import { useTransitionStore } from "./stores/useTransitionStore";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import Star from "./components/Star";
+import { Canvas } from "@react-three/fiber";
+import { ScrollControls } from "@react-three/drei";
 //import LoadingAnimation from "./components/LoadingAnimation";
 
 export default function Layout() {
-    const { isAnimating } = useTransitionStore((s) => s);
-    const linkAnimation = useRef<HTMLDivElement>(null);
-    const tl = gsap.timeline();
-
-    useEffect(() => {
-        if (isAnimating) {
-            tl.to(
-                linkAnimation.current,
-                {
-                    transform: "translateY(0px)",
-                },
-                0
-            ).to(
-                linkAnimation.current,
-                {
-                    transform: "translateY(-100%)",
-                },
-                1
-            );
-        }
-    });
-
     return (
         <>
-            <div
-                ref={linkAnimation}
-                className="absolute top-0 z-50 w-[100vw] h-[100vh] bg-[#00C21F] -translate-y-full"></div>
-            {/* <LoadingAnimation></LoadingAnimation> */}
             <Header></Header>
-            <Outlet></Outlet>
+            <div className="h-[100vh] w-[100vw]">
+                <Canvas>
+                    <color attach={"background"} args={["#FFFFF4"]}></color>
+                    <Star></Star>
+                    <ScrollControls
+                        pages={5}
+                        damping={0.3}
+                        key={location.pathname}>
+                        <Outlet></Outlet>
+                    </ScrollControls>
+                </Canvas>
+            </div>
         </>
     );
 }
