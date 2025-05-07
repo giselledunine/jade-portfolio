@@ -2,12 +2,19 @@ import { useTransitionStore } from "@/stores/useTransitionStore";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
+import { useLocation } from "react-router-dom";
 
 export default function Star() {
     const [planes, setPlanes] = useState<THREE.Mesh<THREE.PlaneGeometry>[]>([]);
-    const { isAnimating } = useTransitionStore((s) => s);
+    const { pathname } = useLocation();
+    const { isAnimating, starAload } = useTransitionStore((s) => s);
     const rows = 15;
     const cols = 17;
+
+    useEffect(() => {
+        console.log("mounted Star");
+        return () => console.log("unmounted Star");
+    }, []);
 
     useEffect(() => {
         function startAnimation(onComplete: () => void) {
@@ -71,7 +78,7 @@ export default function Star() {
                 });
             });
         }
-        if (isAnimating) {
+        if (isAnimating && starAload) {
             console.log("startAnimation");
             if (planes.length > 0) {
                 startAnimation(() => {
@@ -81,7 +88,7 @@ export default function Star() {
                 });
             }
         }
-    }, [isAnimating, planes]);
+    }, [isAnimating, pathname, planes, starAload]);
 
     useEffect(() => {
         const textureLoader = new THREE.TextureLoader();

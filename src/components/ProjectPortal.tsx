@@ -8,7 +8,7 @@ import {
 } from "react";
 import { PrintType } from "@/Print";
 import { useScroll, MeshPortalMaterial, Text } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { invalidate, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -211,7 +211,7 @@ export default function ProjectPortal({
                             loadedCount++;
                             if (loadedCount === totalTextures) {
                                 setTexturesLoaded(true);
-                                //invalidate(); // Force le rendu à se mettre à jour
+                                invalidate(); // Force le rendu à se mettre à jour
                             }
                             resolve(loadedTexture);
                         },
@@ -328,7 +328,6 @@ export default function ProjectPortal({
                     <fog attach={"fog"} args={["#000000", 7, 25]}></fog>
                     <group ref={groupObject}>
                         {texturesLoaded &&
-                            textures &&
                             textures.map((texture, i) => (
                                 <mesh
                                     key={`pages-${i}`}

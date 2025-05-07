@@ -5,6 +5,7 @@
 
 @theme {
   --font-display: "Minion", "sans-serif";
+  --font-secondary: "Helvetica", "sans-serif";
   --shadow-3xl: 0 9px 37px 53px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 24px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
 }
 

@@ -158,17 +158,15 @@ export default function Print() {
     );
 
     useEffect(() => {
-        console.log("mounted");
-        return () => console.log("unmounted");
-    });
+        console.log("mounted Print");
+        return () => console.log("unmounted Print");
+    }, []);
 
     return (
-        <>
-            <StaticScrollElements
-                prints={prints}
-                active={active}
-                setActive={setActive}></StaticScrollElements>
-        </>
+        <StaticScrollElements
+            prints={prints}
+            active={active}
+            setActive={setActive}></StaticScrollElements>
     );
 }
 
@@ -259,7 +257,7 @@ const StaticScrollElements = ({
     const textureLoader = new THREE.TextureLoader();
     const starTexture = textureLoader.load("/star.png");
     return (
-        <>
+        <group>
             <Text
                 ref={titleRef}
                 position={[-5, 3, -3]}
@@ -282,6 +280,6 @@ const StaticScrollElements = ({
                     active={active}
                     setActive={setActive}></ProjectPortal>
             ))}
-        </>
+        </group>
     );
 };
