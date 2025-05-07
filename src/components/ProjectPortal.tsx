@@ -50,7 +50,6 @@ export default function ProjectPortal({
 
     useEffect(() => {
         tl.current = gsap.timeline({ paused: true });
-        console.log("timeline", tl.current, idx);
         if (portalRef.current)
             tl.current
                 .to(
@@ -66,8 +65,8 @@ export default function ProjectPortal({
                     portalRef.current.scale,
                     {
                         duration: 1.5,
-                        x: 1.2,
-                        y: 1.2,
+                        x: 1.5,
+                        y: 1.5,
                         ease: "power3.inOut",
                     },
                     idx
@@ -120,7 +119,6 @@ export default function ProjectPortal({
             // Petit délai pour s'assurer que les meshes sont chargés
             textures.forEach((texture, i) => {
                 const mesh = meshRefs.current[i];
-                console.log("mesh", mesh);
                 if (mesh) {
                     tl.current
                         .to(
@@ -309,25 +307,14 @@ export default function ProjectPortal({
             onPointerLeave={() => setHover(false)}>
             <Text
                 font="/MinionPro-Bold.otf"
-                fontSize={0.3}
-                color={"#F0F0F0"}
+                fontSize={0.2}
+                color={"#000"}
                 lineHeight={0.8}
                 material-toneMapped={false}
                 anchorY="top"
                 anchorX="left"
-                position={[-2.35, 1.45, 0.1]}>
+                position={[-2.95, -2.1, 0.1]}>
                 {print.title}
-            </Text>
-            <Text
-                font="/MinionPro-Bold.otf"
-                fontSize={0.15}
-                color={"#F0F0F0"}
-                lineHeight={0.8}
-                material-toneMapped={false}
-                anchorY="top"
-                anchorX="left"
-                position={[-2.35, 1.15, 0.1]}>
-                {print.date}
             </Text>
             <mesh onDoubleClick={() => setActive(print.title)}>
                 <planeGeometry args={[6, 4]}></planeGeometry>

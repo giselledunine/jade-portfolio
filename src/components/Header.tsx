@@ -67,7 +67,7 @@ export default function Header({
             </div>
             <div className="flex gap-4 mr-4 text-primary">
                 <AnimatedLink to={"/"}>Home</AnimatedLink>
-                <AnimatedLink to={"/print"}>print</AnimatedLink>
+                <AnimatedLink to={"/print"}>Print</AnimatedLink>
                 <a className="hover:text-accent hover:cursor-pointer">
                     Branding
                 </a>

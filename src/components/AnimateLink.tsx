@@ -17,7 +17,7 @@ export function AnimatedLink({
         setTimeout(() => {
             navigate(to);
             endAnimation(); // Important si tu veux éviter des bugs si tu reviens direct
-        }, 500); // même durée que dans Layout
+        }, 2200); // même durée que dans Layout
     };
 
     return (
