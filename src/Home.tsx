@@ -1,4 +1,4 @@
-import { Scroll } from "@react-three/drei";
+import { Scroll, Text, useScroll } from "@react-three/drei";
 import gsap from "gsap";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -16,13 +16,15 @@ export default function Home() {
         () => new THREE.TextureLoader().load("/star.png"),
         []
     );
+    const scroll = useScroll();
+
     useEffect(() => {
         console.log("Mounted Home");
-
+        console.log("scroll", scroll);
         return () => {
             console.log("Unmounted Home");
         };
-    }, []);
+    }, [scroll]);
 
     useEffect(() => {
         if (isAnimating) {
@@ -45,7 +47,7 @@ export default function Home() {
                 .to(
                     starRef.current?.rotation,
                     { z: -0.5, ease: "back.inOut" },
-                    0.3
+                    0.5
                 );
             tl.current
                 .to(
@@ -56,7 +58,7 @@ export default function Home() {
                 .to(
                     star2Ref.current?.rotation,
                     { z: -0.5, ease: "back.inOut" },
-                    0.3
+                    0.5
                 );
         }
 
@@ -152,6 +154,7 @@ export default function Home() {
                     map={starTexture}
                     transparent={true}></meshBasicMaterial>
             </mesh>
+            <Text scale={0}>Home</Text>
         </>
     );
 }

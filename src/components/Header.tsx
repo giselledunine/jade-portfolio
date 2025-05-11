@@ -1,40 +1,20 @@
 import gsap from "gsap";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatedLink } from "./AnimateLink";
 import { useTransitionStore } from "@/stores/useTransitionStore";
+import { useTheme } from "@/ThemeProvider";
 
-export default function Header({
-    //    setActive,
-    active,
-}: {
-    active?: string;
-    setActive?: Dispatch<SetStateAction<string>>;
-}) {
+export default function Header() {
     const headerRef = useRef<HTMLDivElement>(null);
     const backRef = useRef<HTMLAnchorElement>(null);
-    const firstAnimation = useRef<HTMLDivElement>(null);
-    const { isAnimating, starAload } = useTransitionStore((s) => s);
+    const { setPortalActive, activePortal } = useTransitionStore((s) => s);
+    const { theme, setTheme } = useTheme();
 
     useEffect(() => {
-        const tl = gsap.timeline();
-        console.log("ANIMATE", isAnimating, starAload);
-        if (isAnimating && !starAload) {
-            tl.to(firstAnimation.current, {
-                transform: "translateY(0)",
-                duration: 1,
-            }).to(firstAnimation.current, {
-                transform: "translateY(-100%)",
-                delay: 1.5,
-                duration: 1,
-            });
-        }
-    }, [isAnimating, starAload]);
-
-    useEffect(() => {
-        if (active !== "") {
+        if (activePortal !== "") {
             gsap.to(headerRef.current, {
-                color: "#FFFFF4",
-                duration: 0.8,
+                color: "var(--secondary)",
+                delay: 0.3,
                 ease: "power3.inOut",
             });
             gsap.to(backRef.current, {
@@ -49,11 +29,10 @@ export default function Header({
             });
         } else {
             gsap.to(headerRef.current, {
-                color: "#000000",
-                duration: 1.5,
+                color: "var(--primary)",
+                delay: 0.9,
                 ease: "power3.inOut",
             });
-
             gsap.to(backRef.current, {
                 visibility: "hidden",
                 delay: 0.8,
@@ -66,15 +45,13 @@ export default function Header({
                 ease: "power3.inOut",
             });
         }
-    });
+    }, [activePortal]);
     return (
         <>
             <div
-                ref={firstAnimation}
-                className="absolute z-50 w-full h-[100vh] bg-accent -translate-y-full"></div>
-            <div
                 ref={headerRef}
-                className="fixed top-0 z-40 w-full p-4 flex justify-between items-center">
+                id="header"
+                className="fixed text-primary top-0 z-40 w-full p-4 flex justify-between items-center">
                 <div className="flex gap-2 items-center">
                     <img
                         className="w-[44px] h-[44px]"
@@ -82,12 +59,12 @@ export default function Header({
                         src="/iconJadePortfolio.svg"></img>
                     <a
                         ref={backRef}
-                        //onClick={() => setActive("")}
+                        onClick={() => setPortalActive("")}
                         className="hover:cursor-pointer">
                         {"< back"}
                     </a>
                 </div>
-                <div className="flex gap-4 mr-4 text-primary">
+                <div className="flex gap-4 mr-4">
                     <AnimatedLink to={"/"}>Home</AnimatedLink>
                     <AnimatedLink to={"/print"}>Print</AnimatedLink>
                     <AnimatedLink to={"/branding"}>Branding</AnimatedLink>
@@ -95,6 +72,14 @@ export default function Header({
                         Photographie
                     </AnimatedLink>
                     <AnimatedLink to={"/art"}>Art</AnimatedLink>
+                    <button
+                        onClick={() =>
+                            theme == "light"
+                                ? setTheme("dark")
+                                : setTheme("light")
+                        }>
+                        {theme === "light" ? "light" : "dark"}
+                    </button>
                 </div>
             </div>
         </>

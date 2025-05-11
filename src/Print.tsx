@@ -2,15 +2,7 @@ import { useScroll, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import "./App.css";
 import * as THREE from "three";
-import {
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
 import ProjectPortal from "./components/ProjectPortal";
 
@@ -29,7 +21,6 @@ export type PrintType = {
 };
 
 export default function Print() {
-    const [active, setActive] = useState("");
     const prints: PrintType[] = useMemo(
         () => [
             {
@@ -157,28 +148,10 @@ export default function Print() {
         []
     );
 
-    useEffect(() => {
-        console.log("mounted Print");
-        return () => console.log("unmounted Print");
-    }, []);
-
-    return (
-        <StaticScrollElements
-            prints={prints}
-            active={active}
-            setActive={setActive}></StaticScrollElements>
-    );
+    return <StaticScrollElements prints={prints}></StaticScrollElements>;
 }
 
-const StaticScrollElements = ({
-    prints,
-    active,
-    setActive,
-}: {
-    prints: PrintType[];
-    active: string;
-    setActive: Dispatch<SetStateAction<string>>;
-}) => {
+const StaticScrollElements = ({ prints }: { prints: PrintType[] }) => {
     const scroll = useScroll();
     const titleRef = useRef<THREE.Mesh>(null);
     const tl = useRef(gsap.timeline({ paused: true }));
@@ -186,7 +159,44 @@ const StaticScrollElements = ({
 
     //maybe add the portals here so they don't scroll and animate the mouvement with the tl
 
+    useFrame(() => {
+        tl.current.seek(scroll.offset * tl.current.duration());
+    });
+
     useLayoutEffect(() => {
+        tl.current = gsap.timeline({ paused: true });
+        function randomBetween4And6OrMinus4AndMinus6() {
+            const isNegative = Math.random() < 0.5; // 50% de chance que ce soit négatif
+            const value = 2 + Math.random() * 4; // nombre entre 4 et 8
+
+            return isNegative ? -value : value;
+        }
+        prints.forEach((_, idx) => {
+            const randomScale = randomBetween4And6OrMinus4AndMinus6();
+            if (starRef.current)
+                tl.current
+                    .to(
+                        starRef.current.position,
+                        {
+                            x: randomBetween4And6OrMinus4AndMinus6(),
+                            y: randomBetween4And6OrMinus4AndMinus6(),
+                            duration: 1,
+                            ease: "power3.inOut",
+                        },
+                        idx
+                    )
+                    .to(
+                        starRef.current.scale,
+                        {
+                            x: randomScale,
+                            y: randomScale,
+                            duration: 1,
+                            ease: "power3.inOut",
+                        },
+                        idx
+                    );
+        });
+
         if (titleRef.current)
             tl.current
                 .to(
@@ -202,70 +212,29 @@ const StaticScrollElements = ({
                     titleRef.current.material,
                     {
                         opacity: 0,
-                        duration: 0.09,
+                        duration: 0.2,
                         ease: "power1.inOut",
                     },
                     0
                 );
-    }, []);
-
-    useFrame(() => {
-        tl.current.seek(scroll.offset * tl.current.duration());
-    });
-
-    useLayoutEffect(() => {
-        if (starRef.current)
-            tl.current
-                .to(
-                    starRef.current.position,
-                    {
-                        x: 4,
-                        y: -2,
-                        duration: 1,
-                    },
-                    0
-                )
-                .to(
-                    starRef.current.scale,
-                    {
-                        x: 6,
-                        y: 6,
-                        duration: 1,
-                    },
-                    0
-                )
-                .to(
-                    starRef.current.position,
-                    {
-                        x: -2,
-                        y: 3,
-                        duration: 1,
-                    },
-                    1
-                )
-                .to(
-                    starRef.current.scale,
-                    {
-                        x: 4,
-                        y: 4,
-                        duration: 1,
-                    },
-                    1
-                );
-    }, []);
+    }, [prints]);
 
     const textureLoader = new THREE.TextureLoader();
     const starTexture = textureLoader.load("/star.png");
+
     return (
         <group>
-            <Text
-                ref={titleRef}
-                position={[-5, 3, -3]}
-                color={"#000000"}
-                fontSize={2}>
-                Print
-            </Text>
-            <mesh ref={starRef} position={[3, 2, -1]}>
+            <Suspense>
+                <Text
+                    ref={titleRef}
+                    font="/Helvetica.ttf"
+                    position={[-5, 3, -3]}
+                    color={"#000000"}
+                    fontSize={2}>
+                    Print
+                </Text>
+            </Suspense>
+            <mesh ref={starRef} position={[3, 2.2, -1]}>
                 <planeGeometry args={[1, 1]}></planeGeometry>
                 <meshBasicMaterial
                     map={starTexture}
@@ -276,9 +245,7 @@ const StaticScrollElements = ({
                     printslength={prints.length}
                     key={`portal-${idx}`}
                     print={print}
-                    idx={idx}
-                    active={active}
-                    setActive={setActive}></ProjectPortal>
+                    idx={idx}></ProjectPortal>
             ))}
         </group>
     );

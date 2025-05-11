@@ -78,7 +78,7 @@ export default function Star() {
                 });
             });
         }
-        if (isAnimating && starAload) {
+        if (isAnimating) {
             console.log("startAnimation");
             if (planes.length > 0) {
                 startAnimation(() => {

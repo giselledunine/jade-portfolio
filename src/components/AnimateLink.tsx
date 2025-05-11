@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useTransitionStore } from "../stores/useTransitionStore";
-import { useProgress } from "@react-three/drei";
-import { useEffect } from "react";
 
 export function AnimatedLink({
     to,
@@ -18,7 +16,6 @@ export function AnimatedLink({
         setStarAload,
         setStarNotAload,
     } = useTransitionStore((s) => s);
-    const { progress } = useProgress();
     const handleClick = () => {
         if (starAnimationAloadLinks.includes(to)) {
             setStarAload();
@@ -30,10 +27,6 @@ export function AnimatedLink({
             endAnimation(); // Important si tu veux éviter des bugs si tu reviens direct
         }, 2200); // même durée que dans Layout
     };
-
-    useEffect(() => {
-        console.log("progress", progress);
-    }, [progress]);
 
     return (
         <button
